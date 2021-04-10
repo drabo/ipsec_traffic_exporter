@@ -12,6 +12,8 @@ The IPsec Traffic is returned in Bytes per the following ipsec parameters: (conn
 pip install prometheus_client
 ```
 
+At least version 0.10.0 is required by `gauge.clear()`
+
 ### Script location
 
 On your server where Libreswan IPsec runs, copy the script in /usr/local/bin/ and make it executable:
