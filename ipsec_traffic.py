@@ -72,6 +72,7 @@ def main():
                 connections[connection]["left_subnet"] = left_subnet
                 connections[connection]["right_subnet"] = right_subnet
 
+        gauge.clear()
         for i in connections.keys():
             gauge.labels(
                 i,
