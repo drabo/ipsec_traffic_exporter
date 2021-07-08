@@ -35,11 +35,11 @@ IPsec Traffic Exporter arguments
 optional arguments:
   -h, --help            show this help message and exit
   -a ADDRESS, -address ADDRESS, --address ADDRESS
-                        IPsec Traffic Metrics are exposed on this IP address
+                        IPsec Traffic Metrics are exposed on this IP address (default = 0.0.0.0)
   -p PORT, -port PORT, --port PORT
-                        IPsec Traffic Metrics are exposed on this port
+                        IPsec Traffic Metrics are exposed on this port (default = 9754)
   -i INTERVAL, -interval INTERVAL, --interval INTERVAL
-                        IPsec Traffic Metrics read interval in seconds
+                        IPsec Traffic Metrics read interval in seconds (default = 15)
 ```
 
 ### Run for test purpose
