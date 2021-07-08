@@ -9,7 +9,7 @@ The IPsec Traffic is returned in Bytes per the following ipsec parameters: (conn
 ### Prerequisites for installation
 
 ```shell
-pip install prometheus_client>0.10.0
+pip install prometheus_client>=0.10.0
 ```
 
 At least the version 0.10.0 is required by `gauge.clear()`
