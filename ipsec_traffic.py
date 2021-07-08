@@ -6,8 +6,13 @@
 #  Collects Libreswan IPsec traffic information using ipsec cli
 #  The result is reported in Bytes per IPsec connection
 #  Script arguments (not mandatory) to be used:
-#     --port PORT - TCP port open to report metrics for Prometheus (default = 9754)
-#     --interval INTERVAL - time interval between traffic info collect (default = 15 seconds)
+#  -h, --help            show this help message and exit
+#  -a ADDRESS, -address ADDRESS, --address ADDRESS
+#                        IPsec Traffic Metrics are exposed on this IP address (default = 0.0.0.0)
+#  -p PORT, -port PORT, --port PORT
+#                        IPsec Traffic Metrics are exposed on this port (default = 9754)
+#  -i INTERVAL, -interval INTERVAL, --interval INTERVAL
+#                        IPsec Traffic Metrics read interval in seconds (default = 15)
 ###############################################################################
 
 import prometheus_client as prom
