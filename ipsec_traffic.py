@@ -19,15 +19,21 @@ import argparse as ap
 exporter_port = 9754
 # default interval in seconds for generating metrics
 scrape_interval = 15
+# default IP address is 0.0.0.0
+listen_address = ''
 
 # get command line arguments
 parser = ap.ArgumentParser(description='IPsec Traffic Exporter arguments')
-parser.add_argument('-p', '-port', '--port', dest='port', help='IPsec Traffic Metrics are exposed on this port',
-                    required=False, type=int)
-parser.add_argument('-i', '-interval', '--interval', dest='interval',
-                    help='IPsec Traffic Metrics read interval in seconds', required=False, type=int)
+parser.add_argument('-a', '-address', '--address', dest='address', required=False,
+                    help='IPsec Traffic Metrics are exposed on this IP address')
+parser.add_argument('-p', '-port', '--port', dest='port', required=False, type=int,
+                    help='IPsec Traffic Metrics are exposed on this port')
+parser.add_argument('-i', '-interval', '--interval', dest='interval', required=False, type=int,
+                    help='IPsec Traffic Metrics read interval in seconds')
 args = parser.parse_args()
 
+if args.address is not None:
+    listen_address = args.address
 if args.port is not None:
     exporter_port = args.port
 if args.interval is not None:
@@ -46,7 +52,7 @@ def main():
         'Display IPsec Traffic Info',
         ['connection', 'left_subnet', 'right_subnet', 'direction']
     )
-    prom.start_http_server(exporter_port)
+    prom.start_http_server(exporter_port, addr=listen_address) 
 
     while True:
         connections = {}
