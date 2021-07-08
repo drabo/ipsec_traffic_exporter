@@ -9,10 +9,10 @@ The IPsec Traffic is returned in Bytes per the following ipsec parameters: (conn
 ### Prerequisites for installation
 
 ```shell
-pip install prometheus_client
+pip install prometheus_client>0.10.0
 ```
 
-At least version 0.10.0 is required by `gauge.clear()`
+At least the version 0.10.0 is required by `gauge.clear()`
 
 ### Script location
 
@@ -28,12 +28,14 @@ chmod 755 /usr/local/bin/ipsec_traffic.py
 
 ```shell
 $ /usr/local/bin/ipsec_traffic.py --help
-usage: ipsec_traffic.py [-h] [-p PORT] [-i INTERVAL]
+usage: ipsec_traffic.py [-h] [-a ADDRESS] [-p PORT] [-i INTERVAL]
 
 IPsec Traffic Exporter arguments
 
 optional arguments:
   -h, --help            show this help message and exit
+  -a ADDRESS, -address ADDRESS, --address ADDRESS
+                        IPsec Traffic Metrics are exposed on this IP address
   -p PORT, -port PORT, --port PORT
                         IPsec Traffic Metrics are exposed on this port
   -i INTERVAL, -interval INTERVAL, --interval INTERVAL
@@ -48,23 +50,39 @@ The user that runs the command should have sudo rights because the scripts is ca
 /usr/local/bin/ipsec_traffic.py
 ```
 
-or run with custom port and interval:
+This will run with default values as follows:
+
+- listen address: 0.0.0.0
+
+- listen port: 9754
+
+- running interval in seconds: 15
+
+You may also run with custom listen address, port and interval:
 
 ```shell
-/usr/local/bin/ipsec_traffic.py -p 48989 -i 32
+/usr/local/bin/ipsec_traffic.py -a 192.168.0.100 -p 48989 -i 30
 ```
 
-You may check in another terminal if the default port (i.e. 9754) or custom port (e.g. above 48989) is open:
+You may check in another terminal if the default port (i.e. 9754) is open on the default listen address (i.e. 0.0.0.0)
 
 ```shell
 $ ss -nlt
 State      Recv-Q Send-Q    Local Address:Port    Peer Address:Port
 LISTEN     0      128                   *:22                 *:*
-LISTEN     0      5                     *:9754               *:*
-LISTEN     0      128                [::]:22              [::]:*
+LISTEN     0      5               0.0.0.0:9754               *:*
 ```
 
-You may also check the metrics returned by the ipsec_traffic_exporter
+or the custom port (e.g. above 48989) is open on the custom listen address (e.g. above 192.168.0.100):
+
+```shell
+$ ss -nlt
+State      Recv-Q Send-Q    Local Address:Port    Peer Address:Port
+LISTEN     0      128                   *:22                 *:*
+LISTEN     0      5         192.168.0.100:9754               *:*
+```
+
+You may also check the metrics returned by the ipsec_traffic_exporter with:
 
 ```shell
 curl localhost:9754
@@ -157,7 +175,17 @@ Sep 25 17:21:26 my-vpn-node sudo[7251]:     root : TTY=unknown ; PWD=/ ; USER=ro
 Sep 25 17:21:26 my-vpn-node sudo[7255]:     root : TTY=unknown ; PWD=/ ; USER=root ; COMMAND=/sbin/ipsec trafficstatus
 ```
 
-By default the service will expose port **9754** and the metrics will be available either in / or in /metrics
+By default the service will expose the metrics both in / and in /metrics
+
+### Change the exporter listen address
+
+You may change the listen address by changing the ExecStart in service unit:
+
+```shell
+ExecStart=/usr/local/bin/ipsec_traffic.py --address=192.168.0.100
+```
+
+After changing the listen address you need to restart the service.
 
 ### Change the exporter port
 
@@ -182,4 +210,4 @@ After changing the interval you need to restart the service.
 ### Allow the exporter port in firewall
 
 In order for the exporter metrics to be accessible to an external Prometheus server
-you need to allow the access to the port in the server firewall.
+you need to allow the access to the listen address and port in the server firewall.
