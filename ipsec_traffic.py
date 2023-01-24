@@ -25,7 +25,7 @@ exporter_port = 9754
 # default interval in seconds for generating metrics
 scrape_interval = 15
 # default IP address is 0.0.0.0
-listen_address = ''
+listen_address = '0.0.0.0'
 
 # get command line arguments
 parser = ap.ArgumentParser(description='IPsec Traffic Exporter arguments')
